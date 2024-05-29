@@ -42,8 +42,6 @@ func CalcResult() {
 		log.Fatalf("Cannot unmarshal data: %v", err)
 	}
 
-	fmt.Println(register.Results)
-
 	var students = make(map[int]Student)
 	var objects = make(map[int]Object)
 
