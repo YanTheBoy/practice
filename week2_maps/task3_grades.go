@@ -31,26 +31,32 @@ type Register struct {
 	Results  []Result
 }
 
-func CalcResult() {
-	var register Register
+func ParseDzFile(s map[int]Student, o map[int]Object, r Register) (map[int]Student, map[int]Object, Register) {
 
 	file, err := os.ReadFile("dz3.json")
 	if err != nil {
 		log.Fatalf("Cannot read file: %v", err)
 	}
-	if err = json.Unmarshal(file, &register); err != nil {
+	if err = json.Unmarshal(file, &r); err != nil {
 		log.Fatalf("Cannot unmarshal data: %v", err)
 	}
 
+	for _, student := range r.Students {
+		s[student.Id] = student
+	}
+	for _, object := range r.Objects {
+		o[object.Id] = object
+	}
+
+	return s, o, r
+}
+
+func CalcResult() {
+	var register Register
 	var students = make(map[int]Student)
 	var objects = make(map[int]Object)
 
-	for _, student := range register.Students {
-		students[student.Id] = student
-	}
-	for _, object := range register.Objects {
-		objects[object.Id] = object
-	}
+	students, objects, register = ParseDzFile(students, objects, register)
 
 	w := tabwriter.NewWriter(os.Stdout, 12, 0, 0, ' ', tabwriter.Debug|tabwriter.TabIndent)
 
