@@ -8,29 +8,6 @@ import (
 	"text/tabwriter"
 )
 
-type Student struct {
-	Id    int    `json:"id"`
-	Name  string `json:"name"`
-	Grade int    `json:"grade,omitempty"`
-}
-
-type Object struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-}
-
-type Result struct {
-	ObjectID  int `json:"object_id"`
-	StudentID int `json:"student_id"`
-	Result    int `json:"result"`
-}
-
-type Register struct {
-	Students []Student
-	Objects  []Object
-	Results  []Result
-}
-
 func ParseDzFile(s map[int]Student, o map[int]Object, r Register) (map[int]Student, map[int]Object, Register) {
 
 	file, err := os.ReadFile("dz3.json")
