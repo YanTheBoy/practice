@@ -41,12 +41,18 @@ func CalculateMeanResults() {
 			var meanValue float32
 			var meanValues []float32
 
-			for _, res := range register.Results {
-				if students[res.StudentID].Grade == grade && res.ObjectID == object.Id {
-
-					meanValues = append(meanValues, float32(res.Result))
+			filteredReg := Filter(register.Results, func(r Result) bool {
+				if students[r.StudentID].Grade == grade && r.ObjectID == object.Id {
+					return true
 				}
+				return false
+			})
+
+			// Заполняем срез
+			for _, res := range filteredReg {
+				meanValues = append(meanValues, float32(res.Result))
 			}
+
 			meanValue = Reduce(meanValues, 0, func(a, b float32) float32 {
 				return a + b
 			})
@@ -72,6 +78,16 @@ func Reduce[T1, T2 any](s []T1, init T2, f func(T1, T2) T2) T2 {
 	r := init
 	for _, v := range s {
 		r = f(v, r)
+	}
+	return r
+}
+
+func Filter[T any](s []T, f func(T) bool) []T {
+	var r []T
+	for _, v := range s {
+		if f(v) {
+			r = append(r, v)
+		}
 	}
 	return r
 }
