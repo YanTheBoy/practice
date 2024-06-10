@@ -1,7 +1,6 @@
 package week2_maps
 
 import (
-	"fmt"
 	"sort"
 )
 
@@ -25,7 +24,7 @@ func CountVoices(names []string) []Candidate {
 	}
 
 	var candidates []Candidate
-	fmt.Println(candidates)
+
 	for name, voices := range countedVoices {
 		candidates = append(candidates, Candidate{
 			Name:  name,
