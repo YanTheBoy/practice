@@ -1,28 +1,45 @@
 package week3_multithreaing
 
 import (
-	"fmt"
 	"math"
-	"slices"
 )
 
-func Devider(m []int) {
+func SieveOfEratosthenes(m []int) (primes, composites []int) {
+	var p, c []int
 
+	for x := range FindPrimes(m) {
+		p = append(p, x)
+	}
+	for x := range FindComposites(m) {
+		c = append(c, x)
+	}
+	return p, c
 }
 
-func SieveOfEratosthenes(m []int) {
-	slices.Sort(m)
-	var primes, composites []int
-	for _, val := range m {
-		if isPrimeNumber(val) {
-			primes = append(primes, val)
-		} else {
-			composites = append(composites, val)
+func FindPrimes(m []int) chan int {
+	var ch = make(chan int)
+	go func() {
+		defer close(ch)
+		for _, val := range m {
+			if isPrimeNumber(val) {
+				ch <- val
+			}
 		}
-	}
-	fmt.Println(primes)
-	fmt.Println(composites)
+	}()
+	return ch
+}
 
+func FindComposites(m []int) chan int {
+	ch := make(chan int)
+	go func() {
+		defer close(ch)
+		for _, val := range m {
+			if isPrimeNumber(val) == false {
+				ch <- val
+			}
+		}
+	}()
+	return ch
 }
 
 func isPrimeNumber(n int) bool {
@@ -46,4 +63,3 @@ func isPrimeNumber(n int) bool {
 Для записи в массивы используйте два разных канала и горутины.
 Важно, чтобы были использованы владельцы каналов.*/
 
-/*3. Реализуйте функцию слияния двух каналов в один.*/
