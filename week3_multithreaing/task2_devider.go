@@ -34,7 +34,7 @@ func FindComposites(m []int) chan int {
 	go func() {
 		defer close(ch)
 		for _, val := range m {
-			if isPrimeNumber(val) == false {
+			if !isPrimeNumber(val) {
 				ch <- val
 			}
 		}
